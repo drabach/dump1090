@@ -91,7 +91,7 @@ function displayFrame(i) {
         div.appendChild(sample);
     }
     document.getElementById("info").innerHTML =
-        "#"+currentFrame+" "+frame.descr+"<br>"+
+        "#"+currentFrame+" "+frame.time+" "+frame.descr+"<br>"+
         "Bits:"+frame.bits+"<br>"+
         "DF  : "+(frame.hex.charCodeAt(0) >> 3)+"<br>"+
         "fix1: "+frame.fix1+"<br>"+

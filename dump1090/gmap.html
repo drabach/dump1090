@@ -90,9 +90,9 @@
         if (p.flight.length) {
             html += '<b>'+p.flight+'</b><br>';
         }
-        html += 'Altitude: '+p.altitude+' feet<br>';
+        html += 'Altitude: '+p.altitude+' feets<br>';
         html += 'Speed: '+p.speed+' knots<br>';
-        html += 'Coordinates: '+p.lat+', '+p.lon+'<br>';
+        html += 'Coordiates: '+p.lat+', '+p.lon+'<br>';
         i.innerHTML = html;
     }
 
@@ -116,8 +116,6 @@
                     myplane.speed = plane.speed;
                     myplane.lat = plane.lat;
                     myplane.lon = plane.lon;
-                    myplane.track = plane.track;
-                    myplane.flight = plane.flight;
                     if (myplane.hex == Selected)
                         refreshSelectedInfo();
                 } else {
@@ -171,7 +169,7 @@
     <div id="map_canvas" style="width:80%; height:100%"></div>
     <div id="info">
       <div>
-        <h1>Dump1090</h1>
+        <h1>Dump1090 ver 0.3</h1>
         <p id="geninfo"></p>
         <p id="selinfo">Click on a plane for info.</p>
       </div>
