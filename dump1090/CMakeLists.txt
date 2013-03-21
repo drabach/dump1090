@@ -95,6 +95,7 @@ target_link_libraries(dump1090
 # Create install target
 ########################################################################
 install (TARGETS dump1090 DESTINATION bin)
+install (TARGETS dump1090 DESTINATION dump1090/dump1090)
 
 ########################################################################
 # Create uninstall target
