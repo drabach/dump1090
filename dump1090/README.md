@@ -247,7 +247,7 @@ with the Dump1090 distribution under the "testfiles" directory.
 
 Just run it like this:
 
-    ./dump1090 --ifile testfiles/modes1.bin
+    ./dump1090 --ifile testfiles/modes.bin
 
 What is --strip mode?
 ---
