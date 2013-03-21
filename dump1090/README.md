@@ -25,13 +25,13 @@ The main features are:
 Installation
 ---
 
-Type "make".
+Create a "build" directory and do a "cd build; cmake ../dump1090; make; make install"
 
 Normal usage
 ---
 
 To capture traffic directly from your RTL device and show the captured traffic
-on standard output, just run the program without options at all:
+on standard output, just run the program without options at all from the bin directory:
 
     ./dump1090
 
