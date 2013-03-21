@@ -119,16 +119,16 @@ Port 30002
 Connected clients are served with data ASAP as they arrive from the device
 (or from file if --ifile is used) in the raw format similar to the following:
 
-    *8D451E8B99019699C00B0A81F36E;
+    12345*8D451E8B99019699C00B0A81F36E;
 
-Every entry is separated by a simple newline (LF character, hex 0x0A).
+Every entry starts with a time tick and is separated by a simple newline (LF character, hex 0x0A). From time to time a sync message is send.
 
 Port 30001
 ---
 
 Port 30001 is the raw input port, and can be used to feed Dump1090 with
 data in the same format as specified above, with hex messages starting with
-a `*` and ending with a `;` character.
+a time tick, a `*` and ending with a `;` character. (At the moment this is under construction and does not work.)
 
 So for instance if there is another remote Dump1090 instance collecting data
 it is possible to sum the output to a local Dump1090 instance doing something
