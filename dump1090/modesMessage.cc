@@ -14,7 +14,9 @@ extern "C" {
 }
 
 
-static long mstime(void) {
+namespace modeSMessage {
+
+long mstime(void) {
     struct timeval tv;
     long mst;
 
@@ -23,8 +25,6 @@ static long mstime(void) {
     mst += tv.tv_usec/1000;
     return mst;
 }
-
-namespace modeSMessage {
 
 /* ============================= Utility functions ========================== */
 /* Always positive MOD operation, used for CPR decoding. */
@@ -115,20 +115,20 @@ double cprDlonFunction(double lat, int isodd) {
  * 1) 131072 is 2^17 since CPR latitude and longitude are encoded in 17 bits.
  */
 void decodeCPR(struct modeSMessage::aircraft *a) {
-    const double AirDlat0 = 360.0 / 60;
-    const double AirDlat1 = 360.0 / 59;
+    const double AirDlat0 = 360.0 / 60.0;
+    const double AirDlat1 = 360.0 / 59.0;
     double lat0 = a->even_cprlat;
     double lat1 = a->odd_cprlat;
     double lon0 = a->even_cprlon;
     double lon1 = a->odd_cprlon;
 
     /* Compute the Latitude Index "j" */
-    int j = ::floor(((59*lat0 - 60*lat1) / 131072) + 0.5);
-    double rlat0 = AirDlat0 * (cprModFunction(j,60) + lat0 / 131072);
-    double rlat1 = AirDlat1 * (cprModFunction(j,59) + lat1 / 131072);
+    int j = ::floor(((59.0*lat0 - 60.0*lat1) / 131072.0) + 0.5);
+    double rlat0 = AirDlat0 * (cprModFunction(j,60) + lat0 / 131072.0);
+    double rlat1 = AirDlat1 * (cprModFunction(j,59) + lat1 / 131072.0);
 
-    if (rlat0 >= 270 && rlat0 <= 360) rlat0 -= 360;
-    if (rlat1 >= 270 && rlat1 <= 360) rlat1 -= 360;
+    if (rlat0 >= 270.0) rlat0 -= 360.0;
+    if (rlat1 >= 270.0) rlat1 -= 360.0;
 
     /* Check that both are in the same latitude zone, or abort. */
     if (cprNLFunction(rlat0) != cprNLFunction(rlat1)) return;
@@ -138,19 +138,19 @@ void decodeCPR(struct modeSMessage::aircraft *a) {
         /* Use even packet. */
         int ni = cprNFunction(rlat0,0);
         int m = ::floor((((lon0 * (cprNLFunction(rlat0)-1)) -
-                          (lon1 * cprNLFunction(rlat0))) / 131072) + 0.5);
-        a->lon = cprDlonFunction(rlat0,0) * (cprModFunction(m,ni)+lon0/131072);
+                          (lon1 *  cprNLFunction(rlat0)  )    ) / 131072.0) + 0.5);
+        a->lon = cprDlonFunction(rlat0,0) * (cprModFunction(m,ni)+lon0/131072.0);
         a->lat = rlat0;
     } else {
         /* Use odd packet. */
         int ni = cprNFunction(rlat1,1);
         int m = ::floor((((lon0 * (cprNLFunction(rlat1)-1)) -
-                          (lon1 * cprNLFunction(rlat1))) / 131072.0) + 0.5);
-        a->lon = cprDlonFunction(rlat1,1) * (cprModFunction(m,ni)+lon1/131072);
+                          (lon1 *  cprNLFunction(rlat1)  )    ) / 131072.0) + 0.5);
+        a->lon = cprDlonFunction(rlat1,1) * (cprModFunction(m,ni)+lon1/131072.0);
         a->lat = rlat1;
     }
     
-    if (a->lon >= 360) a->lon -= 360;
+    if (a->lon >= 360.0) a->lon -= 360.0;
 }
 
 /* Return the aircraft with the specified address, or NULL if no aircraft
@@ -244,7 +244,7 @@ void sendSync(void)
       {
         counter = 1;
         time_t global_time = ::time(NULL);
-        long  msTime = ::mstime();
+        long  msTime = mstime();
         clock_t relative_time = ::times(&cpu_time);
 
         char msg[225];
@@ -381,11 +381,11 @@ interactiveReceiveData(struct modeSMessage::modesMessage *mm) {
             if (mm->fflag) {
                 a->odd_cprlat = mm->raw_latitude;
                 a->odd_cprlon = mm->raw_longitude;
-                a->odd_cprtime = ::mstime();
+                a->odd_cprtime = mstime();
             } else {
                 a->even_cprlat = mm->raw_latitude;
                 a->even_cprlon = mm->raw_longitude;
-                a->even_cprtime = ::mstime();
+                a->even_cprtime = mstime();
             }
             /* If the two data is less than 10 seconds apart, compute
              * the position. */
@@ -575,8 +575,8 @@ void backgroundTasks(void) {
     }
 
     /* Refresh screen when in interactive mode. */
-    long msTime = ::mstime();
-    if (modesDecode::Modes.interactive &&
+    long msTime = mstime();
+    if (modesDecode::Modes.interactive == 1&&
         (msTime - modesDecode::Modes.interactive_last_update) >
         modesDecode::MODES_INTERACTIVE_REFRESH_TIME)
     {
