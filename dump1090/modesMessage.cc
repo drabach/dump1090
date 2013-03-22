@@ -576,8 +576,8 @@ void backgroundTasks(void) {
 
     /* Refresh screen when in interactive mode. */
     long msTime = mstime();
-    if (modesDecode::Modes.interactive == 1&&
-        (msTime - modesDecode::Modes.interactive_last_update) >
+    if (modesDecode::Modes.interactive == 1 &&
+        ::abs(msTime - modesDecode::Modes.interactive_last_update) >
         modesDecode::MODES_INTERACTIVE_REFRESH_TIME)
     {
         interactiveRemoveStaleAircrafts();
