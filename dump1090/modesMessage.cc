@@ -486,7 +486,7 @@ void interactiveRemoveStaleAircrafts(void) {
     time_t now = ::time(NULL);
 
     while(a) {
-        if ((now - a->seen) > modesDecode::Modes.interactive_ttl) {
+      if (::abs(now - a->seen) > modesDecode::Modes.interactive_ttl) {
             struct modeSMessage::aircraft *next = a->next;
             /* Remove the element from the linked list, with care
              * if we are removing the first element. */
