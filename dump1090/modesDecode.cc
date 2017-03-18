@@ -70,7 +70,7 @@ void modesInit(void) {
     Modes.icao_cache = (uint32_t*)::malloc(sizeof(uint32_t)*MODES_ICAO_CACHE_LEN*2);
     ::memset(Modes.icao_cache,0,sizeof(uint32_t)*MODES_ICAO_CACHE_LEN*2);
     Modes.aircrafts = NULL;
-    Modes.interactive_last_update = 0;
+    Modes.interactive_last_update = modeSMessage::mstime();
     if ((Modes.data = (unsigned char*)::malloc(Modes.data_len)) == NULL ||
         (Modes.magnitude = (uint16_t*)::malloc(Modes.data_len*2)) == NULL) {
       ::fprintf(stderr, "Out of memory allocating data buffer.\n");
@@ -206,7 +206,7 @@ void readBinaryDataFromFile(void) {
             continue;
         }
 
-        if (Modes.interactive) {
+        if (Modes.interactive == 1) {
             /* When --ifile and --interactive are used together, slow down
              * playing at the natural rate of the RTLSDR received. */
             ::pthread_mutex_unlock(&Modes.data_mutex);
@@ -1088,16 +1088,16 @@ void useModesMessage(const clock_t *time, struct modeSMessage::modesMessage *mm)
     if (!Modes.stats && (Modes.check_crc == 0 || mm->crcok)) {
         /* Track aircrafts in interactive mode or if the HTTP
          * interface is enabled. */
-        if (Modes.interactive || 
+        if (Modes.interactive == 1 || 
             Modes.stat_http_requests > 0 || 
             Modes.stat_sbs_connections > 0) 
           {
             struct modeSMessage::aircraft *a = interactiveReceiveData(mm);
             if (a && Modes.stat_sbs_connections > 0) 
               modeSMessage::modesSendSBSOutput(mm, a);  /* Feed SBS output clients. */
-        }
+          }
         /* In non-interactive way, display messages on standard output. */
-        if (!Modes.interactive) {
+        if (Modes.interactive == 0) {
           displayModesMessage(time, mm);
             if (!Modes.raw && !Modes.onlyaddr) ::printf("\n");
         }

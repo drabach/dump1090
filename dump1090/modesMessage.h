@@ -12,7 +12,6 @@ extern "C" {
 
 namespace modeSMessage {
 
-
 /* Structure used to describe an aircraft in iteractive mode. */
 struct aircraft {
     uint32_t addr;      /* ICAO address */
@@ -84,7 +83,7 @@ struct modesMessage {
     int altitude, unit;
 };
 
-
+ long mstime();
  void modesSendSBSOutput(struct modeSMessage::modesMessage *mm, struct aircraft *a);
  void modesSendRawOutput(const clock_t *time, struct modeSMessage::modesMessage *mm);
  struct aircraft* interactiveFindAircraft(uint32_t addr);

@@ -35,6 +35,7 @@ if(CMAKE_COMPILER_IS_GNUCC AND NOT WIN32)
 endif()
 
 add_definitions(-DRADAR_OUTPUT)
+add_definitions(-D_FILE_OFFSET_BITS=64)
 
 ########################################################################
 # Find build dependencies

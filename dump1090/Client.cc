@@ -10,6 +10,7 @@
 extern "C" {
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <unistd.h>
 }
 
 namespace modes {
